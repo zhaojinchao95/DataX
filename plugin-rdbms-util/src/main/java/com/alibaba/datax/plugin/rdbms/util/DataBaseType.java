@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
  */
 public enum DataBaseType {
     MySql("mysql", "com.mysql.jdbc.Driver"),
+    SphereEx("mysql", "com.sphereex.dbplusengine.driver.SphereExDriver"),
     Tddl("mysql", "com.mysql.jdbc.Driver"),
     DRDS("drds", "com.mysql.jdbc.Driver"),
     Oracle("oracle", "oracle.jdbc.OracleDriver"),
@@ -47,6 +48,7 @@ public enum DataBaseType {
         String suffix = null;
         switch (this) {
             case MySql:
+            case SphereEx:
             case DRDS:
             case OceanBase:
                 suffix = "yearIsDateType=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true";
@@ -90,6 +92,14 @@ public enum DataBaseType {
         String suffix = null;
         switch (this) {
             case MySql:
+                suffix = "yearIsDateType=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&tinyInt1isBit=false";
+                if (jdbc.contains("?")) {
+                    result = jdbc + "&" + suffix;
+                } else {
+                    result = jdbc + "?" + suffix;
+                }
+                break;
+            case SphereEx:
                 suffix = "yearIsDateType=false&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&tinyInt1isBit=false";
                 if (jdbc.contains("?")) {
                     result = jdbc + "&" + suffix;
